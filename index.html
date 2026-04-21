@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#28424d">
+<title>PIO Breakfast · ALJ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://api.jsonbin.io" crossorigin>
+<link rel="preload" as="image" href="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800&h=360&fit=crop">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Fraunces:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --dark-teal: #28424d;
+  --dark-teal-2: #1c3039;
+  --prussian: #1c3258;
+  --blaze: #ed6b13;
+  --blaze-light: #f4933f;
+  --sage: #b4c6a8;
+  --sand: #c8c9bc;
+  --indigo: #4c2770;
+  --bg: #f5f2ec;
+  --surface: #ffffff;
+  --dark: #1a1f26;
+  --muted: rgba(26,31,38,0.48);
+  --soft: rgba(26,31,38,0.06);
+  --border: rgba(26,31,38,0.08);
+  --red: #d14545;
+  --green: #6d8f3b;
+  --blue: #3b7296;
+  --shadow-sm: 0 2px 8px rgba(26,31,38,0.05);
+  --shadow: 0 8px 28px rgba(26,31,38,0.08);
+  --shadow-lg: 0 20px 50px rgba(26,31,38,0.12);
+}
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+html { -webkit-text-size-adjust:100%; }
+body {
+  background:var(--bg); color:var(--dark);
+  font-family:'Inter',sans-serif; font-size:14px; line-height:1.5;
+  min-height:100vh; padding-bottom:env(safe-area-inset-bottom,0);
+  background-image:
+    radial-gradient(circle at 15% 5%, rgba(237,107,19,0.05) 0%, transparent 40%),
+    radial-gradient(circle at 85% 95%, rgba(40,66,77,0.06) 0%, transparent 40%);
+}
+.app { max-width:520px; margin:0 auto; padding:14px 12px 40px; }
+
+/* HEADER */
+.header {
+  position:relative; border-radius:22px; overflow:hidden;
+  margin-bottom:14px; box-shadow:var(--shadow-lg); height:180px;
+}
+.header-bg {
+  position:absolute; inset:0;
+  background:
+    linear-gradient(135deg, rgba(28,48,57,0.78) 0%, rgba(40,66,77,0.55) 40%, rgba(237,107,19,0.45) 100%),
+    url('https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=800&h=360&fit=crop'),
+    linear-gradient(135deg, #28424d 0%, #1c3039 50%, #28424d 100%);
+  background-size:cover; background-position:center; background-repeat:no-repeat;
+}
+.header-bg::after {
+  content:''; position:absolute; inset:0;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(237,107,19,0.15) 0%, transparent 35%),
+    radial-gradient(circle at 80% 70%, rgba(180,198,168,0.08) 0%, transparent 40%);
+  pointer-events:none;
+}
+.header-content {
+  position:relative; z-index:2; height:100%;
+  padding:20px 22px; display:flex; flex-direction:column;
+  justify-content:space-between;
+}
+.header-top { display:flex; justify-content:space-between; align-items:center; }
+.logo-row { display:flex; align-items:center; gap:10px; }
+.logo-mark { width:38px; height:38px; }
+.logo-mark svg { width:100%; height:100%; filter:drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+.brand-name {
+  color:#fff; font-size:18px; font-weight:900;
+  letter-spacing:4px; text-transform:uppercase; line-height:1.1;
+  text-shadow:0 2px 8px rgba(0,0,0,0.4);
+}
+.year-badge {
+  background:rgba(255,255,255,0.18); color:#fff;
+  font-size:10px; font-weight:800; letter-spacing:2px;
+  padding:4px 10px; border-radius:16px;
+  border:1px solid rgba(255,255,255,0.25);
+  backdrop-filter:blur(6px);
+}
+.header-bottom { display:flex; align-items:flex-end; justify-content:space-between; }
+.title-block { color:#fff; }
+.title-overline {
+  display:inline-block; font-size:10px; font-weight:800;
+  letter-spacing:2.5px; text-transform:uppercase; margin-bottom:6px;
+  color:#fff; background:rgba(237,107,19,0.85);
+  padding:3px 10px; border-radius:12px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.2);
+}
+.title {
+  font-family:'Fraunces',serif; font-weight:600;
+  font-size:28px; line-height:1; letter-spacing:-0.5px;
+  cursor:pointer; -webkit-user-select:none; user-select:none;
+}
+.subtitle {
+  font-size:11px; color:rgba(255,255,255,0.72);
+  margin-top:4px; letter-spacing:0.3px; font-weight:500;
+}
+.header-icon-emoji { font-size:32px; filter:drop-shadow(0 2px 6px rgba(0,0,0,0.35)); }
+
+/* SKELETON LOADING */
+.skeleton {
+  background:linear-gradient(90deg,
+    rgba(26,31,38,0.04) 25%,
+    rgba(26,31,38,0.08) 50%,
+    rgba(26,31,38,0.04) 75%);
+  background-size:200% 100%;
+  animation:shimmer 1.3s infinite;
+  border-radius:8px;
+}
+@keyframes shimmer {
+  0% { background-position:200% 0; }
+  100% { background-position:-200% 0; }
+}
+.skeleton-line { height:14px; margin-bottom:8px; }
+.skeleton-line.w-60 { width:60%; }
+.skeleton-line.w-40 { width:40%; }
+.skeleton-line.w-80 { width:80%; }
+
+/* CSS-only confetti burst — triggered once */
+.confetti-burst {
+  position:fixed; inset:0; pointer-events:none;
+  z-index:250; overflow:hidden;
+}
+.confetti-piece {
+  position:absolute; top:-10px;
+  width:8px; height:14px;
+  animation:confettiFall 2.5s linear forwards;
+}
+@keyframes confettiFall {
+  0%   { transform:translateY(0) rotate(0deg); opacity:1; }
+  100% { transform:translateY(110vh) rotate(720deg); opacity:0.3; }
+}
+.current-card {
+  background:var(--surface); border-radius:22px;
+  padding:22px 20px 20px; margin-bottom:14px;
+  box-shadow:var(--shadow); position:relative; overflow:hidden;
+  border:1.5px solid rgba(237,107,19,0.25);
+}
+.current-card::before {
+  content:''; position:absolute; top:-30px; right:-30px;
+  width:120px; height:120px; border-radius:50%;
+  background:radial-gradient(circle, rgba(237,107,19,0.1) 0%, transparent 70%);
+  pointer-events:none;
+}
+.current-tag {
+  display:inline-flex; align-items:center; gap:5px;
+  background:var(--blaze); color:#fff;
+  font-size:10px; font-weight:800; letter-spacing:1.5px;
+  padding:5px 12px; border-radius:20px;
+  text-transform:uppercase; margin-bottom:14px;
+  position:relative; z-index:1;
+  box-shadow:0 3px 10px rgba(237,107,19,0.3);
+}
+.current-tag::before {
+  content:''; width:6px; height:6px; border-radius:50%;
+  background:#fff; animation:pulse 1.8s infinite;
+}
+.current-tag.done-tag { background:var(--green); box-shadow:0 3px 10px rgba(109,143,59,0.3); }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+.current-header {
+  display:flex; align-items:center; gap:12px;
+  margin-bottom:16px; position:relative; z-index:1;
+}
+.current-icon {
+  width:50px; height:50px; border-radius:14px;
+  background:linear-gradient(135deg, var(--blaze) 0%, var(--blaze-light) 100%);
+  display:flex; align-items:center; justify-content:center;
+  font-size:26px; flex-shrink:0;
+  box-shadow:0 4px 14px rgba(237,107,19,0.3);
+}
+.current-info { flex:1; min-width:0; }
+.current-date {
+  font-size:11px; color:var(--muted); font-weight:600;
+  letter-spacing:0.5px; text-transform:uppercase; margin-bottom:2px;
+}
+.current-title {
+  font-size:18px; font-weight:800; color:var(--dark);
+  line-height:1.2;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.current-prompt {
+  background:linear-gradient(90deg, rgba(237,107,19,0.06), rgba(237,107,19,0.02));
+  border:1px dashed rgba(237,107,19,0.3);
+  border-radius:12px; padding:10px 14px; margin-bottom:14px;
+  font-size:11.5px; color:var(--dark); font-weight:500;
+  text-align:center; position:relative; z-index:1;
+}
+.current-prompt strong { color:var(--blaze); font-weight:700; }
+
+/* CONFIRM CARDS */
+.confirm-grid {
+  display:grid; grid-template-columns:1fr 1fr; gap:10px;
+  position:relative; z-index:1;
+}
+.person-card {
+  background:linear-gradient(180deg, rgba(180,198,168,0.1), rgba(180,198,168,0.04));
+  border:2px solid transparent;
+  border-radius:18px; padding:14px 10px;
+  display:flex; flex-direction:column; align-items:center; gap:9px;
+  transition:all 0.3s ease;
+}
+.person-card.confirmed {
+  background:linear-gradient(180deg, rgba(109,143,59,0.14), rgba(109,143,59,0.05));
+  border-color:rgba(109,143,59,0.35);
+}
+.person-avatar {
+  width:42px; height:42px; border-radius:50%;
+  background:linear-gradient(135deg, var(--blaze) 0%, var(--blaze-light) 100%);
+  color:#fff; display:flex; align-items:center; justify-content:center;
+  font-size:15px; font-weight:800; letter-spacing:-0.3px;
+  box-shadow:0 3px 10px rgba(237,107,19,0.3);
+}
+.person-card.confirmed .person-avatar {
+  background:linear-gradient(135deg, var(--green) 0%, #8cb554 100%);
+  box-shadow:0 3px 10px rgba(109,143,59,0.3);
+}
+.person-name {
+  font-size:13px; font-weight:700; color:var(--dark);
+  text-align:center; line-height:1.2;
+  min-height:32px; display:flex; align-items:center; justify-content:center;
+}
+.confirm-btn {
+  width:100%; padding:10px 6px;
+  background:var(--dark-teal); color:#fff;
+  font-family:inherit; font-size:11.5px; font-weight:700;
+  border:none; border-radius:11px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; gap:5px;
+  transition:all 0.2s; letter-spacing:0.3px;
+  box-shadow:0 3px 10px rgba(40,66,77,0.25);
+}
+.confirm-btn:active { transform:scale(0.96); }
+.confirm-btn.done {
+  background:linear-gradient(135deg, var(--green) 0%, #8cb554 100%);
+  pointer-events:none;
+  box-shadow:0 3px 10px rgba(109,143,59,0.25);
+}
+/* ════════════════════════════════════════════
+   CONFIRMED STATE — large celebration card
+   (replaces the current pair card once both confirmed)
+════════════════════════════════════════════ */
+.confirmed-card {
+  display:none;
+  position:relative;
+  background:linear-gradient(135deg, #1e3d0a 0%, #3d6b1a 45%, var(--green) 100%);
+  border-radius:22px;
+  padding:28px 22px 24px;
+  margin-bottom:14px;
+  box-shadow:0 16px 44px rgba(30,61,10,0.3);
+  overflow:hidden;
+  color:#fff;
+  animation:confirmedIn 0.55s cubic-bezier(.2,1.1,.3,1.1);
+}
+.confirmed-card.show { display:block; }
+@keyframes confirmedIn {
+  from { opacity:0; transform:translateY(12px) scale(0.97); }
+  to   { opacity:1; transform:translateY(0) scale(1); }
+}
+
+/* Animated sheen */
+.confirmed-card::before {
+  content:'';
+  position:absolute; top:0; left:-100%;
+  width:50%; height:100%;
+  background:linear-gradient(90deg,
+    transparent 0%,
+    rgba(255,255,255,0.12) 50%,
+    transparent 100%);
+  animation:sheen 4s ease-in-out infinite;
+  transform:skewX(-20deg);
+  pointer-events:none;
+}
+@keyframes sheen {
+  0%, 15% { left:-100%; }
+  70%, 100% { left:200%; }
+}
+
+/* Decorative orbs */
+.confirmed-card::after {
+  content:'';
+  position:absolute; top:-60px; right:-40px;
+  width:180px; height:180px; border-radius:50%;
+  background:radial-gradient(circle, rgba(237,107,19,0.25) 0%, transparent 70%);
+  pointer-events:none;
+}
+
+.confirmed-badge {
+  display:inline-flex; align-items:center; gap:6px;
+  background:rgba(255,255,255,0.18);
+  backdrop-filter:blur(6px);
+  border:1px solid rgba(255,255,255,0.25);
+  font-size:10px; font-weight:800; letter-spacing:2px;
+  padding:5px 12px; border-radius:20px;
+  text-transform:uppercase; margin-bottom:16px;
+  position:relative; z-index:2;
+}
+.confirmed-badge .check-circle {
+  width:14px; height:14px; border-radius:50%;
+  background:#fff; color:var(--green);
+  display:flex; align-items:center; justify-content:center;
+  font-size:9px; font-weight:900;
+}
+
+.confirmed-emoji-row {
+  font-size:30px; letter-spacing:8px; margin-bottom:10px;
+  position:relative; z-index:2;
+  filter:drop-shadow(0 3px 6px rgba(0,0,0,0.2));
+}
+.confirmed-emoji-row span {
+  display:inline-block;
+  animation:gentleBounce 2.4s ease-in-out infinite;
+}
+.confirmed-emoji-row span:nth-child(2) { animation-delay: 0.3s; }
+.confirmed-emoji-row span:nth-child(3) { animation-delay: 0.6s; }
+.confirmed-emoji-row span:nth-child(4) { animation-delay: 0.9s; }
+@keyframes gentleBounce {
+  0%, 100% { transform:translateY(0); }
+  50%      { transform:translateY(-4px); }
+}
+
+.confirmed-title {
+  font-family:'Fraunces',serif;
+  font-size:23px; font-weight:700;
+  line-height:1.15; margin-bottom:6px;
+  position:relative; z-index:2;
+  letter-spacing:-0.3px;
+}
+
+.confirmed-names {
+  font-size:14px; font-weight:700;
+  opacity:0.95; margin-bottom:14px;
+  position:relative; z-index:2;
+}
+.confirmed-names strong {
+  color:#ffe9a8;
+  font-weight:800;
+}
+
+.confirmed-info-box {
+  background:rgba(255,255,255,0.1);
+  backdrop-filter:blur(8px);
+  border:1px solid rgba(255,255,255,0.18);
+  border-radius:14px;
+  padding:12px 14px;
+  margin-bottom:14px;
+  position:relative; z-index:2;
+}
+.confirmed-info-row {
+  display:flex; align-items:center; gap:10px;
+  font-size:12px; font-weight:600;
+  padding:5px 0;
+}
+.confirmed-info-row:not(:last-child) {
+  border-bottom:1px solid rgba(255,255,255,0.1);
+  margin-bottom:4px;
+  padding-bottom:8px;
+}
+.confirmed-info-icon {
+  width:28px; height:28px; border-radius:8px;
+  background:rgba(255,255,255,0.18);
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; flex-shrink:0;
+}
+.confirmed-info-text { flex:1; line-height:1.35; }
+.confirmed-info-text strong { font-weight:800; }
+.confirmed-info-label {
+  font-size:9.5px; font-weight:700;
+  letter-spacing:1px; text-transform:uppercase;
+  opacity:0.75; margin-bottom:1px;
+}
+
+.confirmed-live-status {
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  background:rgba(0,0,0,0.15);
+  backdrop-filter:blur(4px);
+  padding:9px 14px; border-radius:20px;
+  font-size:11.5px; font-weight:700;
+  position:relative; z-index:2;
+  letter-spacing:0.3px;
+}
+.confirmed-live-dot {
+  width:8px; height:8px; border-radius:50%;
+  background:#ffe9a8;
+  animation:liveDot 1.6s ease-in-out infinite;
+  box-shadow:0 0 10px rgba(255,233,168,0.6);
+}
+@keyframes liveDot {
+  0%, 100% { opacity:1; transform:scale(1); }
+  50%      { opacity:0.4; transform:scale(0.8); }
+}
+
+/* ATTENDANCE CARD */
+@keyframes slideIn {
+  from { opacity:0; transform:translateY(8px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+.attendance-card {
+  background:linear-gradient(135deg, rgba(59,114,150,0.08) 0%, rgba(59,114,150,0.02) 100%);
+  border:1.5px solid rgba(59,114,150,0.25);
+  border-radius:22px; padding:20px; margin-bottom:14px;
+  box-shadow:var(--shadow-sm); display:none;
+}
+.attendance-card.show {
+  display:block;
+  animation:slideIn 0.4s ease;
+}
+.attendance-header {
+  display:flex; align-items:center; gap:12px; margin-bottom:14px;
+}
+.attendance-icon {
+  width:44px; height:44px; border-radius:13px;
+  background:linear-gradient(135deg, var(--blue) 0%, #5ba3c9 100%);
+  display:flex; align-items:center; justify-content:center;
+  font-size:22px; flex-shrink:0;
+  box-shadow:0 4px 12px rgba(59,114,150,0.3);
+}
+.attendance-title-block { flex:1; }
+.attendance-title {
+  font-size:15px; font-weight:800; color:var(--dark); line-height:1.2;
+}
+.attendance-desc {
+  font-size:11px; color:var(--muted); margin-top:2px;
+  font-weight:500;
+}
+.attendance-count {
+  font-size:10px; font-weight:800; letter-spacing:1px;
+  background:var(--blue); color:#fff;
+  padding:4px 10px; border-radius:20px;
+}
+.attendance-btn {
+  width:100%; padding:14px 18px;
+  background:var(--blue); color:#fff;
+  font-family:inherit; font-size:13px; font-weight:800;
+  border:none; border-radius:14px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; gap:8px;
+  letter-spacing:0.5px;
+  box-shadow:0 4px 14px rgba(59,114,150,0.3);
+  transition:transform 0.15s;
+}
+.attendance-btn:active { transform:scale(0.98); }
+.attendance-btn.checked-in {
+  background:linear-gradient(135deg, var(--green), #8cb554);
+  box-shadow:0 4px 14px rgba(109,143,59,0.25);
+  pointer-events:none;
+}
+.attendance-list {
+  margin-top:12px;
+  max-height:180px; overflow-y:auto;
+  background:rgba(255,255,255,0.6);
+  border-radius:12px; padding:4px;
+}
+.attendance-list:empty { display:none; }
+.attendance-item {
+  display:flex; align-items:center; gap:10px;
+  padding:7px 10px; font-size:12px;
+  border-bottom:1px solid rgba(26,31,38,0.05);
+}
+.attendance-item:last-child { border-bottom:none; }
+.attendance-check {
+  width:18px; height:18px; border-radius:50%;
+  background:var(--green); color:#fff;
+  display:flex; align-items:center; justify-content:center;
+  font-size:10px; font-weight:800; flex-shrink:0;
+}
+.attendance-name { flex:1; font-weight:600; color:var(--dark); }
+.attendance-time { font-size:10px; color:var(--muted); font-weight:500; }
+
+/* SECTIONS */
+.section-card {
+  background:var(--surface); border-radius:20px;
+  overflow:hidden; margin-bottom:12px;
+  box-shadow:var(--shadow-sm); border:1px solid var(--border);
+}
+.section-header {
+  padding:14px 18px 10px;
+  display:flex; align-items:center; justify-content:space-between;
+  border-bottom:1px solid var(--border);
+}
+.section-title {
+  display:flex; align-items:center; gap:8px;
+  font-size:11.5px; font-weight:800; color:var(--dark);
+  letter-spacing:1.5px; text-transform:uppercase;
+}
+.section-title .icon-sm {
+  width:22px; height:22px; border-radius:7px;
+  display:flex; align-items:center; justify-content:center; font-size:12px;
+}
+.icon-sm.done { background:rgba(109,143,59,0.15); color:var(--green); }
+.icon-sm.upcoming { background:rgba(40,66,77,0.08); color:var(--dark-teal); }
+.section-count {
+  font-size:10px; color:var(--muted); font-weight:700;
+  background:var(--soft); padding:3px 9px; border-radius:20px;
+}
+.pair-row {
+  display:flex; align-items:center; gap:10px;
+  padding:11px 18px; border-bottom:1px solid var(--border);
+}
+.pair-row:last-child { border-bottom:none; }
+.pair-num {
+  width:26px; height:26px; border-radius:8px;
+  background:var(--soft);
+  display:flex; align-items:center; justify-content:center;
+  font-size:10px; font-weight:800; color:var(--muted); flex-shrink:0;
+}
+.pair-row.done .pair-num { background:rgba(109,143,59,0.1); color:var(--green); }
+.pair-info { flex:1; min-width:0; }
+.pair-names {
+  font-size:13px; font-weight:600; color:var(--dark); line-height:1.3;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.pair-row.done .pair-names { color:var(--muted); }
+.pair-date {
+  font-size:11px; color:var(--muted); margin-top:1px; font-weight:500;
+}
+.pair-status {
+  flex-shrink:0; font-size:9.5px; font-weight:800;
+  letter-spacing:0.5px; padding:4px 9px; border-radius:20px;
+  text-transform:uppercase;
+}
+.pair-status.done {
+  background:rgba(109,143,59,0.12); color:var(--green);
+  border:1px solid rgba(109,143,59,0.22);
+}
+.pair-status.upcoming {
+  background:var(--soft); color:var(--muted);
+  border:1px solid var(--border);
+}
+
+/* FOOTER */
+.footer {
+  padding:16px 8px 6px; text-align:center;
+  font-size:10.5px; color:var(--muted);
+}
+.footer strong { color:var(--dark-teal); font-weight:700; }
+.footer-divider { margin:0 6px; opacity:0.4; }
+.footer-brand {
+  font-size:9px; margin-top:6px;
+  letter-spacing:2px; text-transform:uppercase;
+  opacity:0.5; font-weight:600;
+}
+
+/* TOAST & LOADING */
+.toast {
+  position:fixed; bottom:20px; left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background:var(--dark-teal-2); color:#fff;
+  padding:12px 20px; border-radius:14px;
+  font-size:12px; font-weight:600;
+  box-shadow:0 8px 24px rgba(0,0,0,0.25);
+  z-index:300; transition:transform 0.3s ease;
+  max-width:90%;
+}
+.toast.show { transform:translateX(-50%) translateY(0); }
+.toast.error { background:var(--red); }
+.toast.success { background:var(--green); }
+.loading-overlay {
+  position:fixed; inset:0; background:rgba(245,242,236,0.8);
+  backdrop-filter:blur(4px);
+  display:none; align-items:center; justify-content:center; z-index:99;
+}
+.loading-overlay.show { display:flex; }
+.spinner {
+  width:40px; height:40px; border-radius:50%;
+  border:3px solid rgba(40,66,77,0.12);
+  border-top-color:var(--blaze);
+  animation:spin 0.8s linear infinite;
+}
+@keyframes spin { to{transform:rotate(360deg)} }
+
+/* MODAL */
+.modal-backdrop {
+  position:fixed; inset:0; background:rgba(26,31,38,0.6);
+  backdrop-filter:blur(8px); z-index:200;
+  display:none; align-items:center; justify-content:center;
+  padding:20px; animation:fadeIn 0.2s ease;
+}
+.modal-backdrop.show { display:flex; }
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+.modal {
+  background:var(--surface); border-radius:22px;
+  padding:26px 24px 22px; max-width:380px; width:100%;
+  box-shadow:0 24px 60px rgba(0,0,0,0.35);
+  animation:slideUp 0.3s cubic-bezier(.2,1.1,.3,1.1);
+}
+@keyframes slideUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+.modal-icon {
+  width:54px; height:54px; border-radius:18px;
+  background:linear-gradient(135deg, var(--blaze), var(--blaze-light));
+  display:flex; align-items:center; justify-content:center;
+  font-size:26px; margin:0 auto 14px;
+  box-shadow:0 6px 16px rgba(237,107,19,0.3);
+}
+.modal-icon.blue {
+  background:linear-gradient(135deg, var(--blue), #5ba3c9);
+  box-shadow:0 6px 16px rgba(59,114,150,0.3);
+}
+.modal-title {
+  font-size:17px; font-weight:800; text-align:center;
+  color:var(--dark); margin-bottom:6px;
+}
+.modal-desc {
+  font-size:12.5px; color:var(--muted);
+  text-align:center; margin-bottom:16px; line-height:1.55;
+}
+.modal-desc strong { color:var(--dark); font-weight:700; }
+.modal-input {
+  width:100%; padding:13px 16px; font-size:16px;
+  border:2px solid var(--border); border-radius:12px;
+  font-family:inherit; font-weight:700;
+  text-align:center; letter-spacing:3px;
+  color:var(--dark); background:rgba(180,198,168,0.12);
+  outline:none; transition:border-color 0.2s, background 0.2s;
+}
+.modal-input:focus { border-color:var(--blaze); background:#fff; }
+.modal-input.error {
+  border-color:var(--red); background:rgba(209,69,69,0.06);
+  animation:shake 0.3s;
+}
+@keyframes shake {
+  0%,100% { transform:translateX(0); }
+  25% { transform:translateX(-6px); }
+  75% { transform:translateX(6px); }
+}
+.modal-hint {
+  font-size:11px; color:var(--muted);
+  text-align:center; margin-top:8px; min-height:14px;
+}
+.modal-hint.error { color:var(--red); font-weight:600; }
+.modal-actions { display:flex; gap:8px; margin-top:16px; }
+.modal-btn {
+  flex:1; padding:12px; border-radius:11px;
+  font-family:inherit; font-size:13px; font-weight:700;
+  border:none; cursor:pointer; transition:transform 0.15s;
+}
+.modal-btn:active { transform:scale(0.96); }
+.modal-btn.cancel { background:var(--soft); color:var(--dark); }
+.modal-btn.submit {
+  background:var(--dark-teal); color:#fff;
+  box-shadow:0 3px 10px rgba(40,66,77,0.25);
+}
+.modal-btn.submit.blue {
+  background:var(--blue); box-shadow:0 3px 10px rgba(59,114,150,0.25);
+}
+
+/* ADMIN PANEL */
+.admin-panel {
+  position:fixed; inset:0; background:var(--bg);
+  z-index:150; display:none; flex-direction:column;
+  animation:fadeIn 0.2s ease;
+}
+.admin-panel.show { display:flex; }
+.admin-header {
+  background:var(--dark-teal); color:#fff;
+  padding:16px 18px; display:flex; align-items:center; gap:12px;
+}
+.admin-close {
+  background:rgba(255,255,255,0.12); color:#fff;
+  border:none; width:34px; height:34px; border-radius:10px;
+  font-size:16px; cursor:pointer;
+}
+.admin-title { font-size:14px; font-weight:800; flex:1; letter-spacing:0.5px; }
+.admin-badge {
+  background:var(--blaze); color:#fff;
+  font-size:9px; font-weight:800; letter-spacing:1.5px;
+  padding:3px 8px; border-radius:6px; text-transform:uppercase;
+}
+.admin-content { flex:1; overflow-y:auto; padding:14px 14px 100px; }
+.admin-hint {
+  background:rgba(237,107,19,0.07);
+  border:1px solid rgba(237,107,19,0.2);
+  border-radius:12px; padding:12px 14px;
+  font-size:11.5px; color:var(--muted);
+  line-height:1.55; margin-bottom:14px;
+}
+.admin-hint strong { color:var(--blaze); }
+.admin-section-label {
+  font-size:10px; font-weight:800; color:var(--muted);
+  letter-spacing:1.5px; text-transform:uppercase;
+  padding:8px 4px; margin-top:4px;
+}
+.admin-add-btn {
+  width:100%; padding:13px; margin-bottom:14px;
+  background:linear-gradient(135deg, var(--blaze), var(--blaze-light));
+  color:#fff; border:none; border-radius:14px;
+  font-size:13px; font-weight:800; cursor:pointer;
+  display:flex; align-items:center; justify-content:center; gap:6px;
+  letter-spacing:0.3px;
+  box-shadow:0 4px 14px rgba(237,107,19,0.28);
+}
+.admin-add-btn:active { transform:scale(0.98); }
+.admin-pair-row {
+  background:var(--surface); border-radius:14px;
+  padding:12px; margin-bottom:9px;
+  border:1px solid var(--border); position:relative;
+}
+.admin-pair-top {
+  display:flex; justify-content:space-between;
+  align-items:flex-start; gap:10px; margin-bottom:10px;
+}
+.admin-pair-num {
+  width:26px; height:26px; border-radius:8px;
+  background:var(--soft); color:var(--muted);
+  font-size:11px; font-weight:800;
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+}
+.admin-pair-info { flex:1; min-width:0; }
+.admin-pair-row-block { margin-bottom:6px; }
+.admin-pair-row-block:last-child { margin-bottom:0; }
+.admin-pair-block-label {
+  font-size:9px; font-weight:700; color:var(--muted);
+  letter-spacing:0.8px; text-transform:uppercase;
+  padding:0 3px; margin-bottom:3px;
+}
+.admin-pair-inputs {
+  display:grid; grid-template-columns:1fr 1fr; gap:6px;
+}
+.admin-pair-inputs input, .admin-date-input {
+  padding:7px 10px; font-size:12px; font-weight:600;
+  border:1px solid var(--border); border-radius:8px;
+  font-family:inherit; color:var(--dark); background:#fafafa;
+  outline:none; transition:border-color 0.15s; width:100%;
+}
+.admin-pair-inputs input:focus, .admin-date-input:focus {
+  border-color:var(--blaze); background:#fff;
+}
+.admin-delete-btn {
+  background:rgba(209,69,69,0.1); color:var(--red);
+  border:none; width:28px; height:28px; border-radius:8px;
+  font-size:13px; cursor:pointer; flex-shrink:0;
+}
+.admin-row-bottom { display:flex; align-items:center; gap:6px; }
+.admin-status-select {
+  font-size:10.5px; font-weight:700; padding:5px 10px;
+  border-radius:7px; border:1px solid var(--border);
+  background:#fff; font-family:inherit; color:var(--dark);
+  outline:none; flex:1;
+}
+.admin-checks { display:flex; gap:5px; flex:2; }
+.admin-check {
+  flex:1; display:flex; align-items:center; gap:5px;
+  padding:5px 8px; border-radius:7px;
+  background:rgba(180,198,168,0.2);
+  font-size:10.5px; font-weight:600;
+  cursor:pointer; user-select:none; transition:background 0.15s;
+  justify-content:center;
+}
+.admin-check input { width:13px; height:13px; accent-color:var(--green); }
+.admin-check.checked {
+  background:rgba(109,143,59,0.18); color:var(--green);
+}
+.admin-save-bar {
+  position:fixed; bottom:0; left:0; right:0;
+  padding:12px 14px; background:var(--bg);
+  border-top:1px solid var(--border);
+  max-width:520px; margin:0 auto;
+}
+.admin-save-btn {
+  width:100%; padding:14px; background:var(--dark-teal);
+  color:#fff; border:none; border-radius:12px;
+  font-size:13px; font-weight:800; cursor:pointer;
+  letter-spacing:0.5px;
+  box-shadow:0 6px 18px rgba(40,66,77,0.25);
+}
+.admin-save-btn:active { transform:scale(0.98); }
+.admin-save-btn:disabled { opacity:0.5; }
+
+/* ADMIN TABS */
+.admin-tabs {
+  display:flex; gap:6px; margin-bottom:14px;
+  background:var(--surface); padding:4px; border-radius:12px;
+  border:1px solid var(--border);
+}
+.admin-tab {
+  flex:1; padding:8px; border:none; background:transparent;
+  font-family:inherit; font-size:11px; font-weight:700;
+  color:var(--muted); border-radius:8px; cursor:pointer;
+  letter-spacing:0.5px; transition:all 0.15s;
+}
+.admin-tab.active {
+  background:var(--dark-teal); color:#fff;
+}
+
+/* MEMBERS SECTION (EMPLOYEE IDS) */
+.admin-member-row {
+  background:var(--surface); border-radius:12px;
+  padding:10px 12px; margin-bottom:7px;
+  border:1px solid var(--border);
+  display:flex; align-items:center; gap:10px;
+}
+.admin-member-name {
+  flex:1; font-size:12.5px; font-weight:600; color:var(--dark);
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.admin-member-id-input {
+  width:110px; padding:6px 10px; font-size:12px; font-weight:600;
+  border:1px solid var(--border); border-radius:8px;
+  font-family:inherit; color:var(--dark); background:#fafafa;
+  outline:none; text-align:center; letter-spacing:1px;
+}
+.admin-member-id-input:focus { border-color:var(--blaze); background:#fff; }
+.admin-member-id-input.missing { border-color:var(--blaze); background:rgba(237,107,19,0.05); }
+
+@media (max-width:380px) {
+  .title { font-size:22px; }
+  .current-title { font-size:16px; }
+  .header { height:160px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-bg"></div>
+    <div class="header-content">
+      <div class="header-top">
+        <div class="logo-row">
+          <div class="logo-mark">
+            <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16 3 L28 12 L23 27 L9 27 L4 12 Z"
+                    stroke="#fff" stroke-width="1.8" fill="none" stroke-linejoin="round"/>
+              <path d="M16 7.5 L24.5 13.8 L21 24.5 L11 24.5 L7.5 13.8 Z"
+                    stroke="#fff" stroke-width="1.3" fill="none" stroke-linejoin="round" opacity="0.6"/>
+            </svg>
+          </div>
+          <div class="brand-name">PIO Team</div>
+        </div>
+        <div class="year-badge">2026</div>
+      </div>
+      <div class="header-bottom">
+        <div class="title-block">
+          <div class="title-overline">Weekly Rotation</div>
+          <div class="title">Breakfast Club</div>
+          <div class="subtitle">Every Wednesday · 26 members</div>
+        </div>
+        <div class="header-icon-emoji">🍽️</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CURRENT PAIR -->
+  <div class="current-card" id="currentCard">
+    <div class="current-tag" id="currentTag">⚡ Up Next</div>
+    <div class="current-header">
+      <div class="current-icon">☕</div>
+      <div class="current-info">
+        <div class="current-date" id="currentDate">
+          <span class="skeleton skeleton-line w-60" style="display:inline-block;"></span>
+        </div>
+        <div class="current-title" id="currentNames">
+          <span class="skeleton skeleton-line w-80" style="display:inline-block;height:18px;"></span>
+        </div>
+      </div>
+    </div>
+    <div class="current-prompt">
+      🔑 Enter your <strong>Employee ID</strong> to confirm your turn
+    </div>
+    <div class="confirm-grid">
+      <div class="person-card" id="card1">
+        <div class="person-avatar" id="avatar1">—</div>
+        <div class="person-name" id="name1">Loading</div>
+        <button class="confirm-btn" id="btn1" onclick="confirmPerson(1)">
+          👆 Tap to Confirm
+        </button>
+      </div>
+      <div class="person-card" id="card2">
+        <div class="person-avatar" id="avatar2">—</div>
+        <div class="person-name" id="name2">Loading</div>
+        <button class="confirm-btn" id="btn2" onclick="confirmPerson(2)">
+          👆 Tap to Confirm
+        </button>
+      </div>
+    </div>
+    <div class="both-confirmed-banner" id="bothBanner" style="display:none;"></div>
+  </div>
+
+  <!-- ═══ LARGE CELEBRATION CARD — persists until Wed 5 PM ═══ -->
+  <div class="confirmed-card" id="confirmedCard">
+    <div class="confirmed-badge">
+      <div class="check-circle">✓</div>
+      <span>Breakfast Confirmed</span>
+    </div>
+
+    <div class="confirmed-emoji-row">
+      <span>☕</span><span>🥐</span><span>🍳</span><span>🌿</span>
+    </div>
+
+    <div class="confirmed-title">Breakfast is locked in!</div>
+    <div class="confirmed-names" id="confirmedNames">
+      <strong>—</strong> &amp; <strong>—</strong> are on it
+    </div>
+
+    <div class="confirmed-info-box">
+      <div class="confirmed-info-row">
+        <div class="confirmed-info-icon">📅</div>
+        <div class="confirmed-info-text">
+          <div class="confirmed-info-label">Tomorrow</div>
+          <strong id="confirmedDate">—</strong>
+        </div>
+      </div>
+      <div class="confirmed-info-row">
+        <div class="confirmed-info-icon">📋</div>
+        <div class="confirmed-info-text">
+          <div class="confirmed-info-label">Status</div>
+          <strong>Orders being arranged</strong>
+        </div>
+      </div>
+      <div class="confirmed-info-row">
+        <div class="confirmed-info-icon">🙌</div>
+        <div class="confirmed-info-text">
+          <div class="confirmed-info-label">For everyone</div>
+          <strong>Register attendance below ↓</strong>
+        </div>
+      </div>
+    </div>
+
+    <div class="confirmed-live-status">
+      <div class="confirmed-live-dot"></div>
+      <span>Live · See you tomorrow morning</span>
+    </div>
+  </div>
+
+  <!-- ATTENDANCE CARD -->
+  <div class="attendance-card" id="attendanceCard">
+    <div class="attendance-header">
+      <div class="attendance-icon">✋</div>
+      <div class="attendance-title-block">
+        <div class="attendance-title">Attending Tomorrow?</div>
+        <div class="attendance-desc">One tap to let the team know</div>
+      </div>
+      <div class="attendance-count" id="attendanceCount">0</div>
+    </div>
+    <button class="attendance-btn" id="attendanceBtn" onclick="registerAttendance()">
+      ✋ Yes, I'll be there
+    </button>
+    <div class="attendance-list" id="attendanceList"></div>
+  </div>
+
+  <!-- DONE SECTION -->
+  <div class="section-card" id="doneSection">
+    <div class="section-header">
+      <div class="section-title">
+        <div class="icon-sm done">✓</div>
+        Already Served
+      </div>
+      <div class="section-count" id="doneCount">0</div>
+    </div>
+    <div id="doneList"></div>
+  </div>
+
+  <!-- UPCOMING SECTION -->
+  <div class="section-card" id="upcomingSection">
+    <div class="section-header">
+      <div class="section-title">
+        <div class="icon-sm upcoming">◷</div>
+        Upcoming Turns
+      </div>
+      <div class="section-count" id="upcomingCount">0</div>
+    </div>
+    <div id="upcomingList"></div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span><strong>13 pairs</strong></span>
+    <span class="footer-divider">·</span>
+    <span>26 members</span>
+    <span class="footer-divider">·</span>
+    <span>Live sync ✓</span>
+    <div class="footer-brand">ALJ · PIO Team · 2026</div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="loading-overlay" id="loading"><div class="spinner"></div></div>
+
+<!-- CODE MODAL -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal">
+    <div class="modal-icon" id="modalIconBox">🔐</div>
+    <div class="modal-title" id="modalTitle">Verify your identity</div>
+    <div class="modal-desc" id="modalDesc">
+      Enter your <strong>Employee ID</strong> to confirm.
+    </div>
+    <input type="text" class="modal-input" id="modalInput" placeholder="Employee ID" maxlength="20" autocomplete="off" inputmode="text">
+    <div class="modal-hint" id="modalHint">Only the assigned person can confirm</div>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" onclick="closeModal()">Cancel</button>
+      <button class="modal-btn submit" id="modalSubmitBtn" onclick="submitCode()">Confirm ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div class="admin-panel" id="adminPanel">
+  <div class="admin-header">
+    <button class="admin-close" onclick="closeAdmin()">✕</button>
+    <div class="admin-title">Admin Panel</div>
+    <div class="admin-badge">PIO</div>
+  </div>
+  <div class="admin-content">
+
+    <div class="admin-tabs">
+      <button class="admin-tab active" data-tab="pairs" onclick="switchAdminTab('pairs')">📋 Pairs</button>
+      <button class="admin-tab" data-tab="members" onclick="switchAdminTab('members')">🆔 Employee IDs</button>
+      <button class="admin-tab" data-tab="tools" onclick="switchAdminTab('tools')">⚙️ Tools</button>
+    </div>
+
+    <div id="adminTabPairs">
+      <div class="admin-hint">
+        <strong>💡 Manage pairs:</strong> add, remove, rename, or change status of any pair.
+      </div>
+      <button class="admin-add-btn" onclick="addNewPair()">
+        <span>➕</span> Add New Pair
+      </button>
+      <div class="admin-section-label">All Pairs</div>
+      <div id="adminPairsList"></div>
+    </div>
+
+    <div id="adminTabMembers" style="display:none;">
+      <div class="admin-hint">
+        <strong>🆔 Employee IDs:</strong> enter each team member's Employee ID. These are used to verify identity during confirmation. IDs marked orange are missing.
+      </div>
+      <div id="adminMembersList"></div>
+    </div>
+
+    <div id="adminTabTools" style="display:none;">
+      <div class="admin-hint">
+        <strong>⚙️ Maintenance tools</strong> for weekly upkeep.
+      </div>
+      <button class="admin-add-btn" onclick="undoLastDone()" style="background:linear-gradient(135deg, #9a6b1a, #c8973a); box-shadow:0 4px 14px rgba(200,151,58,0.28); margin-bottom:10px;">
+        <span>↶</span> Undo Last Rotation
+      </button>
+      <button class="admin-add-btn" onclick="markCurrentAsDone()" style="background:linear-gradient(135deg, var(--green), #8cb554); box-shadow:0 4px 14px rgba(109,143,59,0.28); margin-bottom:10px;">
+        <span>✓</span> Mark Current Pair as Done
+      </button>
+      <button class="admin-add-btn" onclick="resetCurrentConfirmations()" style="background:linear-gradient(135deg, var(--dark-teal), #3d6071); box-shadow:0 4px 14px rgba(40,66,77,0.28);">
+        <span>↺</span> Reset Current Pair Confirmations
+      </button>
+      <div style="margin-top:14px;font-size:10.5px;color:var(--muted);line-height:1.6;padding:0 4px;">
+        <strong style="color:var(--dark);">Fully automatic:</strong> When both confirm, the celebration card shows until Wednesday 5 PM of the pair's date. At that point, the pair moves to Done, the next pair becomes Pending, and attendance counter resets — all automatically. No manual steps needed.
+      </div>
+    </div>
+
+  </div>
+  <div class="admin-save-bar">
+    <button class="admin-save-btn" id="adminSaveBtn" onclick="saveAdminChanges()">
+      💾 Save All Changes
+    </button>
+  </div>
+</div>
+<script>
+// ════════════════════════════════════════════════════════════
+//  CONFIGURATION
+// ════════════════════════════════════════════════════════════
+const BIN_ID     = '69e4c323856a6821894d9f4b';
+const API_KEY    = '$2a$10$t3F9Vj/FGkXcNPz0PrkjuOwj81gVAPnmx3inRLl.UhqM.IzHYe9Q.';
+const API_URL    = `https://api.jsonbin.io/v3/b/${BIN_ID}`;
+const ADMIN_PASS = 'admin2026';
+
+// Default data structure (migration-safe)
+function defaultData() {
+  return {
+    pairs: [],
+    members: [],        // [{name, employeeId}]
+    attendance: [],     // [{name, timestamp}]
+    lastAttendanceReset: null
+  };
+}
+
+let data = defaultData();
+let isLoading = false;
+let pendingConfirmWhich = null;
+let currentAdminTab = 'pairs';
+
+// ════════════════════════════════════════════════════════════
+//  HELPERS
+// ════════════════════════════════════════════════════════════
+function initials(name) {
+  return (name || '?').split(/\s+/).map(w => w[0]).slice(0,2).join('').toUpperCase();
+}
+
+function showToast(msg, type = '') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show ' + type;
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+function setLoading(on) {
+  document.getElementById('loading').classList.toggle('show', on);
+  isLoading = on;
+}
+
+function escapeAttr(s) {
+  return String(s||'').replace(/"/g,'&quot;').replace(/</g,'&lt;');
+}
+
+function escapeText(s) {
+  return String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// Build unique member list from pairs
+function syncMembersFromPairs() {
+  const allNames = new Set();
+  data.pairs.forEach(p => {
+    if (p.p1) allNames.add(p.p1);
+    if (p.p2) allNames.add(p.p2);
+  });
+  const existing = {};
+  (data.members || []).forEach(m => { existing[m.name] = m.employeeId || ''; });
+  data.members = Array.from(allNames).map(name => ({
+    name,
+    employeeId: existing[name] || ''
+  })).sort((a, b) => a.name.localeCompare(b.name));
+}
+
+function getEmployeeIdFor(name) {
+  const m = (data.members || []).find(x => x.name === name);
+  return m ? (m.employeeId || '').trim() : '';
+}
+
+// Auto-transition logic:
+// - Each confirmed pair has a specific Wednesday date (e.g. "Apr 22")
+// - After that Wednesday 5 PM → mark as done, advance to next pair
+// - Attendance is cleared automatically in the same transition
+function maybeAutoTransition() {
+  const confirmed = data.pairs.find(p =>
+    p.status === 'pending' && p.p1ok && p.p2ok);
+
+  if (!confirmed) return false;
+
+  // Parse the pair's date like "Apr 22" or "May 7"
+  const pairWednesday = parseBreakfastDate(confirmed.date);
+  if (!pairWednesday) return false;
+
+  // Cutoff = that Wednesday at 5:00 PM
+  const cutoff = new Date(pairWednesday);
+  cutoff.setHours(17, 0, 0, 0);
+
+  const now = new Date();
+  if (now < cutoff) return false; // Still before cutoff — keep showing the big panel
+
+  // Past cutoff → rotate
+  confirmed.status = 'done';
+  const next = data.pairs.find(p => p.status === 'upcoming');
+  if (next) next.status = 'pending';
+
+  // Auto-clear attendance for new week
+  data.attendance = [];
+  data.lastAttendanceReset = now.toISOString();
+
+  return true;
+}
+
+// Parse "Apr 22" / "May 7" / "Jun 4" into a Date (year inferred from today)
+function parseBreakfastDate(dateStr) {
+  if (!dateStr) return null;
+  const months = {
+    jan:0, feb:1, mar:2, apr:3, may:4, jun:5,
+    jul:6, aug:7, sep:8, oct:9, nov:10, dec:11
+  };
+  const m = dateStr.trim().match(/^([A-Za-z]+)\s+(\d{1,2})$/);
+  if (!m) return null;
+  const monthIdx = months[m[1].toLowerCase().slice(0,3)];
+  if (monthIdx === undefined) return null;
+  const day = parseInt(m[2], 10);
+  if (!day) return null;
+
+  // Use current year; if the resulting date is far in the past, it's probably next year
+  const now = new Date();
+  let year = now.getFullYear();
+  let result = new Date(year, monthIdx, day);
+  // If it's more than 6 months in the past, assume next year
+  if ((now - result) > 1000 * 60 * 60 * 24 * 180) {
+    result = new Date(year + 1, monthIdx, day);
+  }
+  return result;
+}
+
+// ════════════════════════════════════════════════════════════
+//  API
+// ════════════════════════════════════════════════════════════
+async function loadData() {
+  try {
+    const res = await fetch(`${API_URL}/latest`, {
+      headers: { 'X-Access-Key': API_KEY, 'X-Bin-Meta': 'false' }
+    });
+    if (!res.ok) throw new Error('Load failed: ' + res.status);
+    const loaded = await res.json();
+
+    // Migration: ensure all keys exist
+    data = Object.assign(defaultData(), loaded);
+    if (!Array.isArray(data.members)) data.members = [];
+    if (!Array.isArray(data.attendance)) data.attendance = [];
+
+    syncMembersFromPairs();
+
+    // Auto-rotation check
+    if (maybeAutoTransition()) {
+      await saveData();
+    }
+
+    saveToCache(); // Cache for instant next-open
+    render();
+  } catch (err) {
+    console.error(err);
+    showToast('⚠️ Connection error', 'error');
+  }
+}
+
+async function saveData() {
+  try {
+    setLoading(true);
+    const res = await fetch(API_URL, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Access-Key': API_KEY
+      },
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) throw new Error('Save failed: ' + res.status);
+    setLoading(false);
+    return true;
+  } catch (err) {
+    console.error(err);
+    setLoading(false);
+    showToast('⚠️ Save failed — try again', 'error');
+    return false;
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+//  CONFIRM FLOW
+// ════════════════════════════════════════════════════════════
+function confirmPerson(which) {
+  const current = data.pairs.find(p => p.status === 'pending');
+  if (!current) return;
+  const key = which === 1 ? 'p1ok' : 'p2ok';
+  if (current[key]) return;
+
+  const name = which === 1 ? current.p1 : current.p2;
+  const expectedId = getEmployeeIdFor(name);
+
+  if (!expectedId) {
+    showToast('⚠️ Admin must add Employee ID first', 'error');
+    return;
+  }
+
+  pendingConfirmWhich = which;
+  document.getElementById('modalIconBox').textContent = '🆔';
+  document.getElementById('modalIconBox').className = 'modal-icon';
+  document.getElementById('modalSubmitBtn').className = 'modal-btn submit';
+  document.getElementById('modalTitle').textContent = `Verify ${name}`;
+  document.getElementById('modalDesc').innerHTML =
+    `Enter your <strong>Employee ID</strong> to confirm.<br>Only <strong>${escapeText(name)}</strong> can confirm this turn.`;
+  document.getElementById('modalInput').value = '';
+  document.getElementById('modalInput').placeholder = 'Employee ID';
+  document.getElementById('modalInput').classList.remove('error');
+  document.getElementById('modalHint').textContent = 'Identity verification required';
+  document.getElementById('modalHint').classList.remove('error');
+  document.getElementById('modalBackdrop').classList.add('show');
+  document.getElementById('modalBackdrop').dataset.mode = 'confirm';
+  setTimeout(() => document.getElementById('modalInput').focus(), 250);
+}
+
+function closeModal() {
+  document.getElementById('modalBackdrop').classList.remove('show');
+  pendingConfirmWhich = null;
+}
+
+async function submitCode() {
+  const mode = document.getElementById('modalBackdrop').dataset.mode;
+  if (mode === 'attendance') { submitAttendance(); return; }
+
+  const input = document.getElementById('modalInput');
+  const hint  = document.getElementById('modalHint');
+  const code  = input.value.trim();
+
+  const current = data.pairs.find(p => p.status === 'pending');
+  if (!current) return;
+  const name = pendingConfirmWhich === 1 ? current.p1 : current.p2;
+  const expectedId = getEmployeeIdFor(name);
+
+  if (code.toLowerCase() !== expectedId.toLowerCase()) {
+    input.classList.add('error');
+    hint.textContent = '❌ Wrong Employee ID';
+    hint.classList.add('error');
+    input.value = '';
+    setTimeout(() => input.focus(), 100);
+    return;
+  }
+
+  const which = pendingConfirmWhich;
+  closeModal();
+  await doConfirm(which);
+}
+
+async function doConfirm(which) {
+  const current = data.pairs.find(p => p.status === 'pending');
+  if (!current) return;
+  const key = which === 1 ? 'p1ok' : 'p2ok';
+  const name = which === 1 ? current.p1 : current.p2;
+  if (current[key]) return;
+
+  const wasFirstConfirmation = !current.p1ok && !current.p2ok;
+  const willCompleteNow = (which === 1 ? current.p2ok : current.p1ok);
+
+  current[key] = true;
+  render();
+  const ok = await saveData();
+  if (ok) {
+    showToast(`✅ ${name} confirmed!`, 'success');
+    // 🎉 Celebration burst when both are now confirmed
+    if (willCompleteNow) {
+      launchConfetti();
+    }
+  } else {
+    current[key] = false;
+    render();
+  }
+}
+
+// Lightweight CSS confetti — no library, minimal DOM
+function launchConfetti() {
+  const colors = ['#ed6b13', '#f4933f', '#6d8f3b', '#8cb554', '#28424d', '#b4c6a8'];
+  const burst = document.createElement('div');
+  burst.className = 'confetti-burst';
+  const count = 30; // kept low for performance
+  for (let i = 0; i < count; i++) {
+    const p = document.createElement('div');
+    p.className = 'confetti-piece';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.background = colors[i % colors.length];
+    p.style.animationDelay = (Math.random() * 0.4) + 's';
+    p.style.animationDuration = (2 + Math.random() * 1.5) + 's';
+    p.style.transform = `rotate(${Math.random() * 360}deg)`;
+    burst.appendChild(p);
+  }
+  document.body.appendChild(burst);
+  setTimeout(() => burst.remove(), 3500);
+}
+
+document.addEventListener('keydown', (e) => {
+  const backdrop = document.getElementById('modalBackdrop');
+  if (!backdrop.classList.contains('show')) return;
+  if (e.key === 'Enter') submitCode();
+  if (e.key === 'Escape') closeModal();
+});
+
+// ════════════════════════════════════════════════════════════
+//  ATTENDANCE
+// ════════════════════════════════════════════════════════════
+function registerAttendance() {
+  // No verification needed — just increment counter
+  if (!data.attendance) data.attendance = [];
+
+  // Check if this device already registered
+  const deviceKey = 'pio_attendance_' + (data.lastAttendanceReset || 'default');
+  if (localStorage.getItem(deviceKey) === 'yes') {
+    showToast(`You're already registered ✓`, 'success');
+    return;
+  }
+
+  data.attendance.push({ timestamp: new Date().toISOString() });
+  localStorage.setItem(deviceKey, 'yes');
+  render();
+  saveData().then(ok => {
+    if (ok) {
+      showToast(`✋ You're in!`, 'success');
+    } else {
+      data.attendance.pop();
+      localStorage.removeItem(deviceKey);
+      render();
+    }
+  });
+}
+
+async function submitAttendance() {
+  // No longer used — kept for backward compatibility
+  closeModal();
+}
+
+// ════════════════════════════════════════════════════════════
+//  RENDER
+// ════════════════════════════════════════════════════════════
+function render() {
+  const current = data.pairs.find(p => p.status === 'pending');
+  const done    = data.pairs.filter(p => p.status === 'done');
+  const upcoming = data.pairs.filter(p => p.status === 'upcoming');
+
+  if (current) {
+    const bothConfirmed = current.p1ok && current.p2ok;
+    document.getElementById('currentDate').textContent = `Wednesday · ${current.date}`;
+    document.getElementById('currentNames').textContent = `${current.p1} & ${current.p2}`;
+
+    const tag = document.getElementById('currentTag');
+    if (bothConfirmed) {
+      tag.innerHTML = '✓ Confirmed';
+      tag.className = 'current-tag done-tag';
+    } else {
+      tag.innerHTML = '⚡ Up Next';
+      tag.className = 'current-tag';
+    }
+
+    document.getElementById('name1').textContent = current.p1;
+    document.getElementById('name2').textContent = current.p2;
+    document.getElementById('avatar1').textContent = initials(current.p1);
+    document.getElementById('avatar2').textContent = initials(current.p2);
+
+    const btn1 = document.getElementById('btn1');
+    const btn2 = document.getElementById('btn2');
+    const card1 = document.getElementById('card1');
+    const card2 = document.getElementById('card2');
+
+    if (current.p1ok) {
+      btn1.classList.add('done');
+      btn1.innerHTML = '✅ Confirmed';
+      card1.classList.add('confirmed');
+    } else {
+      btn1.classList.remove('done');
+      btn1.innerHTML = '👆 Tap to Confirm';
+      card1.classList.remove('confirmed');
+    }
+    if (current.p2ok) {
+      btn2.classList.add('done');
+      btn2.innerHTML = '✅ Confirmed';
+      card2.classList.add('confirmed');
+    } else {
+      btn2.classList.remove('done');
+      btn2.innerHTML = '👆 Tap to Confirm';
+      card2.classList.remove('confirmed');
+    }
+    // Toggle large celebration card vs current pair card
+    const confirmedCard = document.getElementById('confirmedCard');
+    const currentCard = document.getElementById('currentCard');
+    if (bothConfirmed) {
+      // Show large celebration card, hide the pair card
+      currentCard.style.display = 'none';
+      confirmedCard.classList.add('show');
+      document.getElementById('confirmedNames').innerHTML =
+        `<strong>${escapeText(current.p1)}</strong> &amp; <strong>${escapeText(current.p2)}</strong> are on it`;
+      document.getElementById('confirmedDate').textContent =
+        `Wednesday · ${escapeText(current.date)}`;
+    } else {
+      currentCard.style.display = '';
+      confirmedCard.classList.remove('show');
+    }
+
+    // ATTENDANCE CARD — show only when both confirmed
+    const attCard = document.getElementById('attendanceCard');
+    if (bothConfirmed) {
+      attCard.classList.add('show');
+      renderAttendance();
+    } else {
+      attCard.classList.remove('show');
+    }
+  } else {
+    document.getElementById('currentDate').textContent = 'All done!';
+    document.getElementById('currentNames').textContent = 'Rotation complete 🎉';
+    document.getElementById('attendanceCard').classList.remove('show');
+    document.getElementById('confirmedCard').classList.remove('show');
+    document.getElementById('currentCard').style.display = '';
+  }
+
+  document.getElementById('doneCount').textContent = done.length;
+  document.getElementById('doneList').innerHTML = done.map(p => `
+    <div class="pair-row done">
+      <div class="pair-num">${p.id}</div>
+      <div class="pair-info">
+        <div class="pair-names">${escapeText(p.p1)} &amp; ${escapeText(p.p2)}</div>
+        <div class="pair-date">${escapeText(p.date)}</div>
+      </div>
+      <div class="pair-status done">Done</div>
+    </div>
+  `).join('');
+
+  document.getElementById('upcomingCount').textContent = upcoming.length;
+  document.getElementById('upcomingList').innerHTML = upcoming.map(p => `
+    <div class="pair-row">
+      <div class="pair-num">${p.id}</div>
+      <div class="pair-info">
+        <div class="pair-names">${escapeText(p.p1)} &amp; ${escapeText(p.p2)}</div>
+        <div class="pair-date">${escapeText(p.date)}</div>
+      </div>
+      <div class="pair-status upcoming">Upcoming</div>
+    </div>
+  `).join('');
+
+  document.getElementById('doneSection').style.display = done.length ? '' : 'none';
+  document.getElementById('upcomingSection').style.display = upcoming.length ? '' : 'none';
+}
+
+function renderAttendance() {
+  const list = data.attendance || [];
+  const count = list.length;
+  document.getElementById('attendanceCount').textContent = `${count}/26`;
+
+  // Check if this device already registered
+  const deviceKey = 'pio_attendance_' + (data.lastAttendanceReset || 'default');
+  const alreadyRegistered = localStorage.getItem(deviceKey) === 'yes';
+
+  const btn = document.getElementById('attendanceBtn');
+  if (alreadyRegistered) {
+    btn.className = 'attendance-btn checked-in';
+    btn.innerHTML = `✓ You're registered for tomorrow`;
+  } else {
+    btn.className = 'attendance-btn';
+    btn.innerHTML = `✋ Yes, I'll be there`;
+  }
+
+  // Hide the old name list entirely
+  const listEl = document.getElementById('attendanceList');
+  if (listEl) listEl.innerHTML = '';
+}
+
+// ════════════════════════════════════════════════════════════
+//  ADMIN
+// ════════════════════════════════════════════════════════════
+let pressTimer = null;
+const titleEl = document.querySelector('.title');
+titleEl.addEventListener('mousedown', () => {
+  pressTimer = setTimeout(openAdmin, 1500);
+});
+titleEl.addEventListener('touchstart', () => {
+  pressTimer = setTimeout(openAdmin, 1500);
+}, { passive: true });
+['mouseup','mouseleave','touchend','touchcancel'].forEach(e => {
+  titleEl.addEventListener(e, () => clearTimeout(pressTimer));
+});
+
+function openAdmin() {
+  const pin = prompt('🔐 Admin password:');
+  if (pin !== ADMIN_PASS) {
+    if (pin !== null) showToast('❌ Wrong password', 'error');
+    return;
+  }
+  syncMembersFromPairs();
+  switchAdminTab('pairs');
+  document.getElementById('adminPanel').classList.add('show');
+}
+
+function closeAdmin() {
+  document.getElementById('adminPanel').classList.remove('show');
+  loadData();
+}
+
+function switchAdminTab(tab) {
+  currentAdminTab = tab;
+  document.querySelectorAll('.admin-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.tab === tab);
+  });
+  document.getElementById('adminTabPairs').style.display = tab === 'pairs' ? '' : 'none';
+  document.getElementById('adminTabMembers').style.display = tab === 'members' ? '' : 'none';
+  document.getElementById('adminTabTools').style.display = tab === 'tools' ? '' : 'none';
+  if (tab === 'pairs') renderAdminPairs();
+  if (tab === 'members') renderAdminMembers();
+}
+
+function renderAdminPairs() {
+  const list = document.getElementById('adminPairsList');
+  list.innerHTML = data.pairs.map((p, idx) => `
+    <div class="admin-pair-row">
+      <div class="admin-pair-top">
+        <div class="admin-pair-num">${p.id}</div>
+        <div class="admin-pair-info">
+          <div class="admin-pair-row-block">
+            <div class="admin-pair-block-label">Names</div>
+            <div class="admin-pair-inputs">
+              <input type="text" value="${escapeAttr(p.p1)}" placeholder="Person 1"
+                     oninput="updateName(${idx},'p1',this.value)">
+              <input type="text" value="${escapeAttr(p.p2)}" placeholder="Person 2"
+                     oninput="updateName(${idx},'p2',this.value)">
+            </div>
+          </div>
+          <div class="admin-pair-row-block">
+            <div class="admin-pair-block-label">Date</div>
+            <input type="text" class="admin-date-input" value="${escapeAttr(p.date)}"
+                   placeholder="Date (e.g. Apr 22)" oninput="updateDate(${idx},this.value)">
+          </div>
+        </div>
+        <button class="admin-delete-btn" onclick="deletePair(${idx})" title="Delete">🗑️</button>
+      </div>
+      <div class="admin-row-bottom">
+        <select class="admin-status-select" onchange="updateStatus(${idx}, this.value)">
+          <option value="done" ${p.status==='done'?'selected':''}>✓ Done</option>
+          <option value="pending" ${p.status==='pending'?'selected':''}>⚡ Pending</option>
+          <option value="upcoming" ${p.status==='upcoming'?'selected':''}>◷ Upcoming</option>
+        </select>
+        <div class="admin-checks">
+          <label class="admin-check ${p.p1ok?'checked':''}">
+            <input type="checkbox" ${p.p1ok?'checked':''} onchange="updateCheck(${idx},'p1ok',this.checked)">
+            <span>P1 ✓</span>
+          </label>
+          <label class="admin-check ${p.p2ok?'checked':''}">
+            <input type="checkbox" ${p.p2ok?'checked':''} onchange="updateCheck(${idx},'p2ok',this.checked)">
+            <span>P2 ✓</span>
+          </label>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderAdminMembers() {
+  syncMembersFromPairs();
+  const list = document.getElementById('adminMembersList');
+  list.innerHTML = data.members.map((m, idx) => `
+    <div class="admin-member-row">
+      <div class="admin-member-name">${escapeText(m.name)}</div>
+      <input type="text"
+             class="admin-member-id-input ${!m.employeeId ? 'missing' : ''}"
+             value="${escapeAttr(m.employeeId || '')}"
+             placeholder="Employee ID"
+             oninput="updateMemberId(${idx}, this.value)">
+    </div>
+  `).join('');
+}
+
+function updateName(idx, field, val) {
+  data.pairs[idx][field] = val;
+  // Don't re-sync members here — it interrupts typing. Will sync on save.
+}
+function updateDate(idx, val) { data.pairs[idx].date = val; }
+function updateStatus(idx, val) { data.pairs[idx].status = val; }
+function updateCheck(idx, key, val) {
+  data.pairs[idx][key] = val;
+  renderAdminPairs();
+}
+function updateMemberId(idx, val) {
+  data.members[idx].employeeId = val.trim();
+}
+
+function addNewPair() {
+  const maxId = data.pairs.reduce((m,p) => Math.max(m, p.id||0), 0);
+  data.pairs.push({
+    id: maxId + 1,
+    date: '—',
+    p1: 'New Person 1',
+    p2: 'New Person 2',
+    p1ok: false,
+    p2ok: false,
+    status: 'upcoming'
+  });
+  syncMembersFromPairs();
+  renderAdminPairs();
+  setTimeout(() => {
+    const content = document.querySelector('.admin-content');
+    content.scrollTop = content.scrollHeight;
+  }, 50);
+}
+
+function deletePair(idx) {
+  if (!confirm(`Delete pair: ${data.pairs[idx].p1} & ${data.pairs[idx].p2}?`)) return;
+  data.pairs.splice(idx, 1);
+  syncMembersFromPairs();
+  renderAdminPairs();
+}
+
+function undoLastDone() {
+  // Find the current pending pair (will become upcoming again)
+  const currentPending = data.pairs.find(p => p.status === 'pending');
+
+  // Find the last pair marked as done (highest id among done)
+  const doneList = data.pairs.filter(p => p.status === 'done');
+  if (doneList.length === 0) {
+    showToast('No pair to undo', 'error');
+    return;
+  }
+  const lastDone = doneList.reduce((a, b) => (a.id > b.id ? a : b));
+
+  if (!confirm(`Restore "${lastDone.p1} & ${lastDone.p2}" back as the current pending pair?`)) return;
+
+  // Demote current pending back to upcoming (if any)
+  if (currentPending) {
+    currentPending.status = 'upcoming';
+    currentPending.p1ok = false;
+    currentPending.p2ok = false;
+  }
+
+  // Promote last done back to pending
+  lastDone.status = 'pending';
+  // Keep p1ok/p2ok as-is so the celebration panel reappears
+
+  showToast('↶ Last rotation undone', 'success');
+}
+
+function markCurrentAsDone() {
+  const current = data.pairs.find(p => p.status === 'pending');
+  if (!current) { showToast('No pending pair found', 'error'); return; }
+  if (!confirm(`Mark "${current.p1} & ${current.p2}" as Done and move to next pair?`)) return;
+  current.status = 'done';
+  current.p1ok = true;
+  current.p2ok = true;
+  const next = data.pairs.find(p => p.status === 'upcoming');
+  if (next) next.status = 'pending';
+  data.attendance = [];
+  showToast('✓ Moved to next pair', 'success');
+}
+
+function clearAttendance() {
+  if (!confirm('Clear all attendance registrations for this week?')) return;
+  data.attendance = [];
+  data.lastAttendanceReset = new Date().toISOString();
+  showToast('🧹 Attendance cleared', 'success');
+}
+
+function resetCurrentConfirmations() {
+  const current = data.pairs.find(p => p.status === 'pending');
+  if (!current) { showToast('No pending pair', 'error'); return; }
+  if (!confirm(`Reset confirmations for ${current.p1} & ${current.p2}?`)) return;
+  current.p1ok = false;
+  current.p2ok = false;
+  showToast('↺ Confirmations reset', 'success');
+}
+
+async function saveAdminChanges() {
+  const btn = document.getElementById('adminSaveBtn');
+  btn.disabled = true;
+  btn.textContent = '⏳ Saving...';
+
+  // CRITICAL: Flush any pending input values from visible fields
+  // This ensures we capture ALL fields even if the last edit hasn't fired oninput yet
+  document.querySelectorAll('#adminMembersList input').forEach((inp, idx) => {
+    if (data.members[idx]) {
+      data.members[idx].employeeId = inp.value.trim();
+    }
+  });
+  document.querySelectorAll('#adminPairsList .admin-pair-row').forEach((row, idx) => {
+    if (!data.pairs[idx]) return;
+    const inputs = row.querySelectorAll('.admin-pair-inputs input');
+    if (inputs[0]) data.pairs[idx].p1 = inputs[0].value;
+    if (inputs[1]) data.pairs[idx].p2 = inputs[1].value;
+    const dateInput = row.querySelector('.admin-date-input');
+    if (dateInput) data.pairs[idx].date = dateInput.value;
+  });
+
+  // Now re-sync members list based on potentially-changed names
+  syncMembersFromPairs();
+
+  const ok = await saveData();
+  btn.disabled = false;
+  btn.textContent = '💾 Save All Changes';
+  if (ok) {
+    showToast('✅ All changes saved!', 'success');
+    setTimeout(() => closeAdmin(), 800);
+  }
+}
+
+// ════════════════════════════════════════════════════════════
+//  LIVE SYNC
+// ════════════════════════════════════════════════════════════
+let pollTimer = null;
+function startPolling() {
+  if (pollTimer) return;
+  pollTimer = setInterval(() => {
+    if (!document.hidden && !isLoading &&
+        !document.getElementById('adminPanel').classList.contains('show')) {
+      loadData();
+    }
+  }, 5000);
+}
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) loadData();
+});
+
+// ════════════════════════════════════════════════════════════
+//  INSTANT CACHE — show last-known data immediately on open
+//  (eliminates the "Loading..." delay for returning users)
+// ════════════════════════════════════════════════════════════
+const CACHE_KEY = 'pio_breakfast_cache_v1';
+
+function saveToCache() {
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify({
+      data,
+      savedAt: Date.now()
+    }));
+  } catch (e) { /* quota errors — safe to ignore */ }
+}
+
+function loadFromCache() {
+  try {
+    const raw = localStorage.getItem(CACHE_KEY);
+    if (!raw) return false;
+    const obj = JSON.parse(raw);
+    // Use cache only if < 24 hours old
+    if (Date.now() - obj.savedAt > 86400000) return false;
+    data = Object.assign(defaultData(), obj.data);
+    if (!Array.isArray(data.members)) data.members = [];
+    if (!Array.isArray(data.attendance)) data.attendance = [];
+    syncMembersFromPairs();
+    render();
+    return true;
+  } catch (e) { return false; }
+}
+
+// Show cached data instantly, then refresh from server in background
+const hadCache = loadFromCache();
+
+// Kick off
+loadData().then(startPolling);
+</script>
+</body></html>
