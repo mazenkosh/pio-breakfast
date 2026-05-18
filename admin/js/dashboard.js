@@ -156,27 +156,42 @@
         try {
             const data = await rpc('get_plant_stats', {});
             if (!data || !data.length) return;
-            const max = Math.max(...data.map(r=>Number(r.total)));
-            const colors = {'Plant-1':'#51859A','Plant-2':'#28424D','Plant-3':'#069999','Plant-4':'#5FC4E2','Plant-6':'#ED6B13'};
+            const max = Math.max(...data.map(r => Number(r.total)), 1);
+            const colors = {
+                'Plant-1': '#51859A', 'Plant-2': '#28424D',
+                'Plant-3': '#069999', 'Plant-4': '#5FC4E2', 'Plant-6': '#ED6B13'
+            };
+
             $c.innerHTML = `
-                <div class="card" style="margin-top:var(--space-8);">
-                    <div class="card-header"><div class="card-title">🏭 Plant Performance — All Time</div></div>
+                <div class="section-label" style="margin-top:32px;">Plant Performance — All Time</div>
+                <div class="card" style="margin-bottom:24px;">
                     <div class="card-body">
-                        <div style="display:grid;grid-template-columns:repeat(${data.length},1fr);gap:var(--space-4);align-items:end;padding-bottom:var(--space-4);min-height:200px;">
+                        <div class="plant-bar-wrap">
                             ${data.map(r => {
-                                const t=Number(r.total), p=Number(r.passed), pct=t>0?Math.round(p/t*100):0;
-                                const h=Math.max(20,Math.round(t/max*150));
-                                const c=colors[r.plant]||'#51859A';
-                                return `<div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-2);">
-                                    <div style="font-weight:700;font-size:1rem;color:${c};">${numFmt(t)}</div>
-                                    <div style="font-size:0.78rem;color:#069999;font-weight:600;">${pct}% pass</div>
-                                    <div style="width:100%;background:${c};border-radius:6px 6px 0 0;height:${h}px;opacity:0.85;"></div>
-                                    <div style="font-weight:600;font-size:0.85rem;color:var(--alj-dark-teal);">${esc(r.plant)}</div>
-                                </div>`;
+                                const t = Number(r.total), p = Number(r.passed);
+                                const pct = t > 0 ? Math.round(p/t*100) : 0;
+                                const h = Math.max(20, Math.round(t/max*150));
+                                const c = colors[r.plant] || '#51859A';
+                                const rateColor = pct >= 70 ? '#069999' : pct >= 50 ? '#ED6B13' : '#B92A2A';
+                                return `
+                                    <div class="plant-bar-col">
+                                        <div class="plant-bar-count" style="color:${c};">${numFmt(t)}</div>
+                                        <div class="plant-bar-rate" style="color:${rateColor};">${pct}% pass</div>
+                                        <div class="plant-bar" style="background:${c};height:${h}px;" title="${r.plant}: ${numFmt(t)} records, ${pct}% pass rate"></div>
+                                        <div class="plant-bar-label">${esc(r.plant)}</div>
+                                    </div>`;
                             }).join('')}
                         </div>
                     </div>
                 </div>`;
+
+            // Animate bars after render
+            setTimeout(() => {
+                $c.querySelectorAll('.plant-bar').forEach(bar => {
+                    bar.style.opacity = '1';
+                });
+            }, 100);
+
         } catch(err) { console.error('Plant chart error:', err); }
     }
 
@@ -210,21 +225,21 @@
             document.getElementById('ac').innerHTML = `
 
                 <!-- Yearly Trend -->
-                <div class="card" style="margin-bottom:var(--space-6);">
+                <div class="card" style="margin-bottom:20px;">
                     <div class="card-header"><div class="card-title">📈 Training Volume by Year</div></div>
                     <div class="card-body">
-                        <div style="display:flex;gap:var(--space-6);align-items:flex-end;height:220px;padding-bottom:var(--space-4);">
+                        <div style="display:flex;gap:20px;align-items:flex-end;height:220px;padding-bottom:12px;">
                             ${yearly.map(r => `
-                                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:var(--space-2);">
-                                    <div style="font-weight:800;color:var(--alj-teal);font-size:1.3rem;">${numFmt(r.count)}</div>
-                                    <div style="width:100%;background:var(--alj-teal);border-radius:8px 8px 0 0;height:${Math.max(20,Math.round(Number(r.count)/maxYear*160))}px;opacity:0.85;"></div>
-                                    <div style="font-weight:700;color:var(--alj-dark-teal);font-size:0.95rem;">${esc(r.year)}</div>
+                                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:8px;">
+                                    <div style="font-weight:800;color:var(--alj-teal);font-size:1.25rem;">${numFmt(r.count)}</div>
+                                    <div style="width:100%;background:var(--alj-teal);border-radius:8px 8px 0 0;height:${Math.max(24,Math.round(Number(r.count)/maxYear*160))}px;transition:height 1s cubic-bezier(0.4,0,0.2,1);opacity:0.85;"></div>
+                                    <div style="font-weight:700;color:var(--alj-dark-teal);font-size:1rem;">${esc(r.year)}</div>
                                 </div>`).join('')}
                         </div>
                     </div>
                 </div>
 
-                <div style="display:grid;grid-template-columns:1fr 1fr;gap:var(--space-6);margin-bottom:var(--space-6);">
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
 
                     <!-- Pass Rate by Plant -->
                     <div class="card">
@@ -233,16 +248,17 @@
                             ${plantStats.map(r => {
                                 const rate = Number(r.total)>0 ? Math.round(Number(r.passed)/Number(r.total)*100) : 0;
                                 const clr = rate>=70?'#069999':rate>=50?'#ED6B13':'#B92A2A';
-                                return `<div style="margin-bottom:var(--space-4);">
-                                    <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-                                        <span style="font-weight:700;color:var(--alj-dark-teal);font-size:0.95rem;">${esc(r.plant)}</span>
-                                        <span style="font-weight:800;color:${clr};font-size:0.95rem;">${rate}%</span>
-                                    </div>
-                                    <div style="height:10px;background:var(--color-bg-alt);border-radius:5px;overflow:hidden;">
-                                        <div style="height:100%;width:${rate}%;background:${clr};border-radius:5px;"></div>
-                                    </div>
-                                    <div style="font-size:0.78rem;color:var(--color-ink-subtle);margin-top:4px;">${numFmt(r.passed)} passed / ${numFmt(r.total)} total</div>
-                                </div>`;
+                                return `
+                                    <div style="margin-bottom:18px;">
+                                        <div style="display:flex;justify-content:space-between;margin-bottom:7px;">
+                                            <span style="font-weight:700;color:var(--alj-dark-teal);">${esc(r.plant)}</span>
+                                            <span style="font-weight:800;color:${clr};">${rate}%</span>
+                                        </div>
+                                        <div class="progress-wrap">
+                                            <div class="progress-bar" style="width:${rate}%;background:${clr};"></div>
+                                        </div>
+                                        <div style="font-size:0.75rem;color:#9B9B9D;margin-top:4px;">${numFmt(r.passed)} passed / ${numFmt(r.total)} total</div>
+                                    </div>`;
                             }).join('')}
                         </div>
                     </div>
@@ -252,50 +268,50 @@
                         <div class="card-header"><div class="card-title">🚗 Top Models Trained</div></div>
                         <div class="card-body">
                             ${topModels.map((r,i) => `
-                                <div style="display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-3);">
-                                    <div style="width:28px;height:28px;border-radius:50%;background:var(--alj-teal);color:white;display:flex;align-items:center;justify-content:center;font-size:0.75rem;font-weight:700;flex-shrink:0;">${i+1}</div>
+                                <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
+                                    <div style="width:26px;height:26px;border-radius:50%;background:var(--alj-teal);color:white;display:flex;align-items:center;justify-content:center;font-size:0.72rem;font-weight:700;flex-shrink:0;">${i+1}</div>
                                     <div style="flex:1;min-width:0;">
-                                        <div style="font-weight:700;color:var(--alj-dark-teal);font-size:0.92rem;">${esc(r.model)}</div>
-                                        <div style="height:7px;background:var(--color-bg-alt);border-radius:4px;margin-top:5px;">
-                                            <div style="height:100%;width:${Math.round(Number(r.count)/maxModel*100)}%;background:var(--alj-teal);border-radius:4px;"></div>
+                                        <div style="font-weight:700;color:var(--alj-dark-teal);font-size:0.9rem;margin-bottom:5px;">${esc(r.model)}</div>
+                                        <div class="progress-wrap">
+                                            <div class="progress-bar" style="width:${Math.round(Number(r.count)/maxModel*100)}%;background:var(--alj-teal);"></div>
                                         </div>
                                     </div>
-                                    <div style="font-weight:800;color:var(--alj-charcoal);font-size:0.95rem;min-width:40px;text-align:right;">${numFmt(r.count)}</div>
+                                    <div style="font-weight:800;color:#717173;font-size:0.9rem;min-width:45px;text-align:right;">${numFmt(r.count)}</div>
                                 </div>`).join('')}
                         </div>
                     </div>
                 </div>
 
                 <!-- Monthly Trend -->
-                <div class="card" style="margin-bottom:var(--space-6);">
-                    <div class="card-header"><div class="card-title">📅 Monthly Training Trend (Last 24 Months)</div></div>
-                    <div class="card-body">
-                        <div style="display:flex;gap:6px;align-items:flex-end;height:180px;overflow-x:auto;padding-bottom:var(--space-6);">
+                <div class="card" style="margin-bottom:20px;">
+                    <div class="card-header"><div class="card-title">📅 Monthly Training Trend — Last 24 Months</div></div>
+                    <div class="card-body" style="overflow-x:auto;">
+                        <div style="display:flex;gap:5px;align-items:flex-end;height:180px;padding-bottom:32px;min-width:600px;">
                             ${monthly.map(r => `
-                                <div style="flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:38px;" title="${esc(r.month)}: ${numFmt(r.count)}">
-                                    <div style="font-size:0.65rem;font-weight:600;color:var(--alj-teal);">${numFmt(r.count)}</div>
-                                    <div style="width:28px;background:var(--alj-teal);border-radius:4px 4px 0 0;height:${Math.max(4,Math.round(Number(r.count)/maxMonth*130))}px;opacity:${0.5+0.5*(Number(r.count)/maxMonth)};"></div>
-                                    <div style="font-size:0.6rem;color:var(--color-ink-subtle);transform:rotate(-45deg);transform-origin:top left;margin-top:10px;white-space:nowrap;">${r.month.substring(5)}'${r.month.substring(2,4)}</div>
+                                <div style="flex:1;min-width:28px;display:flex;flex-direction:column;align-items:center;gap:3px;" title="${esc(r.month)}: ${numFmt(r.count)}">
+                                    <div style="font-size:0.62rem;font-weight:600;color:var(--alj-teal);">${numFmt(r.count)}</div>
+                                    <div style="width:100%;background:var(--alj-teal);border-radius:4px 4px 0 0;height:${Math.max(3,Math.round(Number(r.count)/maxMonth*130))}px;opacity:${0.45+0.55*(Number(r.count)/maxMonth)};transition:height 1s ease;"></div>
+                                    <div style="font-size:0.58rem;color:#9B9B9D;transform:rotate(-40deg);transform-origin:top center;margin-top:6px;white-space:nowrap;">${r.month.substring(5)}'${r.month.substring(2,4)}</div>
                                 </div>`).join('')}
                         </div>
                     </div>
                 </div>
 
-                <!-- Summary -->
+                <!-- Summary Stats -->
                 <div class="card">
                     <div class="card-header"><div class="card-title">📊 All-Time Summary</div></div>
                     <div class="card-body">
-                        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:var(--space-4);">
+                        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;">
                             ${[
-                                [numFmt(totalAll), 'Total Trainings', 'var(--alj-teal-soft)', 'var(--alj-teal)'],
-                                [overallPass+'%', 'Overall Pass Rate', '#E6F4F4', '#069999'],
-                                [numFmt(plantStats.length), 'Active Plants', 'var(--alj-teal-soft)', 'var(--alj-teal)'],
-                                [numFmt(topModels.length), 'Car Models', '#FDF1E6', 'var(--alj-blaze)'],
-                                [numFmt(yearly.length), 'Years of Data', 'var(--alj-teal-soft)', 'var(--alj-teal)'],
+                                [numFmt(totalAll), 'Total Trainings', '#EEF4F6', '#51859A'],
+                                [overallPass+'%', 'Pass Rate', '#E6F4F4', '#069999'],
+                                [numFmt(plantStats.length), 'Active Plants', '#EEF4F6', '#51859A'],
+                                [numFmt(topModels.length), 'Car Models', '#FDF1E6', '#ED6B13'],
+                                [numFmt(yearly.length), 'Years of Data', '#EEF4F6', '#51859A'],
                             ].map(([val,label,bg,clr]) => `
-                                <div style="text-align:center;padding:var(--space-5);background:${bg};border-radius:var(--radius-lg);">
-                                    <div style="font-size:2.2rem;font-weight:800;color:${clr};">${val}</div>
-                                    <div style="font-size:0.78rem;color:var(--alj-dark-teal);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-top:4px;">${label}</div>
+                                <div style="text-align:center;padding:18px 12px;background:${bg};border-radius:12px;">
+                                    <div style="font-size:2rem;font-weight:800;color:${clr};line-height:1;">${val}</div>
+                                    <div style="font-size:0.72rem;color:var(--alj-dark-teal);font-weight:600;text-transform:uppercase;letter-spacing:0.06em;margin-top:6px;">${label}</div>
                                 </div>`).join('')}
                         </div>
                     </div>
